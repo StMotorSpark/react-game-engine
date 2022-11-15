@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { SceneContext } from "../../global/components/SceneManager";
 
-//TODO this does not work. I think it is an issue with the props ref
+// the base node component. Includes positioning and sizing
 const NodeBase = styled.div`
     position: fixed;
     top: ${props => props.pos.y}px;};
@@ -21,22 +21,31 @@ const NodeBase = styled.div`
 function useNodeState(settings) {
     const [state, setState] = useState({
         type: settings?.type,
-        pos: settings?.pos ?? {x: 0, y: 0},
+        pos: settings?.startPos ?? {x: 0, y: 0},
         size: settings?.size ?? {width: 0, height: 0},
     });
 
-    const { changeScene } = useContext(SceneContext);
-
     return {
-        ...state,
+        ...state
     };
 }
 
-function Node({settings, children}) {
+function Node({settings, children, moveInfo}) {
     const state = useNodeState(settings);
 
+    // build out the info for the 
+    let nodeInfo = {...state};
+
+    // process additional state changes
+
+    // movement changes
+    if(moveInfo) {
+        nodeInfo.pos.x += moveInfo.posAqjust.x;
+        nodeInfo.pos.y += moveInfo.posAqjust.y;
+    }
+
     return (
-        <NodeBase {...state}>
+        <NodeBase {...nodeInfo}>
             {children}
         </NodeBase>
     );

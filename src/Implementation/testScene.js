@@ -1,31 +1,48 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
-// import { SceneContext } from "../engine/global/components/SceneManager";
 import Scene from "../engine/global/components/Scene";
 import Node from "../engine/node/components/Node";
 import { SceneContext } from "../engine/global/components/SceneManager";
+import useMovement from "../engine/node/hooks/useMovement";
 
 function useTestSceneSate() {
+    // add in the change scene context
     const { changeScene } = useContext(SceneContext);
 
+    // add in the player movement hook
+    const playerMove = useMovement();
+
+    // create a go to next level function
     const goToNextLevel = () => {
         console.log("go to next level");
         changeScene("scene1");
     }
 
+    // return the state
     return {
+        playerMove,
         goToNextLevel
     }
 }
 
 function TestScene(props) {
-    const { goToNextLevel } = useTestSceneSate(props);
+    const { 
+        playerMove, 
+        goToNextLevel 
+    } = useTestSceneSate(props);
 
     return (
         <Scene>
+            <button onClick={() => {
+                playerMove.move({ xAxis: 1, yAxis: 1 });
+            }}>
+                Move
+            </button>
             <Node
+                key={"player"}
+                type="player"
                 settings={{
-                    pos: {
+                    startPos: {
                         x: 550,
                         y: 400
                     },
@@ -34,15 +51,14 @@ function TestScene(props) {
                         height: 100
                     }
                 }}
-                type="player"
-                key={"player"}
+                moveInfo={playerMove}
             >Character</Node>
-            
+
             <Node key={"node1"}>
                 Example Button
-                <button onClick={goToNextLevel}>
+                {/* <button onClick={goToNextLevel}>
                     Next Level
-                </button>
+                </button> */}
             </Node>
         </Scene>
     );
