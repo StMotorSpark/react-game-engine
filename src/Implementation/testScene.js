@@ -23,11 +23,27 @@ function TestScene(props) {
 
     return (
         <Scene>
-            <Node />
-            <Node />
-            <button onClick={goToNextLevel}>
-                Next Level
-            </button>
+            <Node
+                settings={{
+                    pos: {
+                        x: 550,
+                        y: 400
+                    },
+                    size: {
+                        width: 100,
+                        height: 100
+                    }
+                }}
+                type="player"
+                key={"player"}
+            >Character</Node>
+            
+            <Node key={"node1"}>
+                Example Button
+                <button onClick={goToNextLevel}>
+                    Next Level
+                </button>
+            </Node>
         </Scene>
     );
 }
