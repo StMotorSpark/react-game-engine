@@ -22,7 +22,12 @@ function useTestSceneSate() {
         handleInput
     );
     // add in the player movement hook
-    const playerMove = useMovement();
+    const playerMove = useMovement({
+        speed: {
+            x: 5,
+            y: 2
+        }
+    });
 
     // add in the change scene context
     const { changeScene } = useContext(SceneContext);

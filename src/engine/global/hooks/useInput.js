@@ -1,9 +1,10 @@
 import React, {useState, useRef, useLayoutEffect, useEffect} from "react";
 
+//TODO there are problems with the firing of the event loop
+// seems like it is an issue diwth some events getting stuck
 function useInput(defaultInputMap, baseInputData, inputHandler) {
     const [inputMap, setInputMap] = useState(defaultInputMap ?? {});
     const activeInputs = useRef([]);
-    //TODO is this needed?
     const activeInputInterval = useRef(null);
 
     useEffect(() => {
@@ -28,14 +29,14 @@ function useInput(defaultInputMap, baseInputData, inputHandler) {
                     // call the input handler
                     inputHandler(data);
                 }
-            }, 1000 / 60);
+            }, 1000 / 30);
         } else {
             console.log("No Input Handler defined");
         }
 
         return () => {
-            //TODO implement the cleanup of the input handler
-            // do something here
+            // clear the interval
+            clearInterval(activeInputInterval.current);
         }
     }, []);
     
