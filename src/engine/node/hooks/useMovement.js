@@ -16,8 +16,8 @@ function useMovement(settings) {
     const move = ({xAxis, yAxis}) => {
         setState({
             posAqjust: {
-                x: state.posAqjust.x + (state.speed.x * xAxis),
-                y: state.posAqjust.y + (state.speed.y * yAxis)
+                x: state.posAqjust.x + (state.speed.x * xAxis ?? 0),
+                y: state.posAqjust.y + (state.speed.y * yAxis ?? 0)
             },
             speed: {...state.speed}
         })
