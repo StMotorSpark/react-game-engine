@@ -5,6 +5,7 @@ import Node from "../engine/node/components/Node";
 import { SceneContext } from "../engine/global/components/SceneManager";
 import useMovement from "../engine/node/hooks/useMovement";
 import useInput from "../engine/global/hooks/useInput";
+import useCollision from "../engine/global/hooks/useCollision";
 
 function useTestSceneSate() {
     // add in the input hook
@@ -24,10 +25,12 @@ function useTestSceneSate() {
     // add in the player movement hook
     const playerMove = useMovement({
         speed: {
-            x: 5,
-            y: 2
+            x: 8,
+            y: 4
         }
     });
+    // add the collision hook
+    const { registerCollisionObject } = useCollision();
 
     // add in the change scene context
     const { changeScene } = useContext(SceneContext);
@@ -61,14 +64,16 @@ function useTestSceneSate() {
     // return the state
     return {
         playerMove,
-        goToNextLevel
+        goToNextLevel,
+        registerCollisionObject
     }
 }
 
 function TestScene(props) {
     const {
         playerMove,
-        goToNextLevel
+        goToNextLevel,
+        registerCollisionObject
     } = useTestSceneSate(props);
 
     return (
@@ -92,13 +97,30 @@ function TestScene(props) {
                     }
                 }}
                 moveInfo={playerMove}
+                collisionData={{
+                    registerCollisionObject,
+                    onCollision: () => {
+                        alert("player collided!!");
+                    }
+                }}
             >Character</Node>
 
-            <Node key={"node1"}>
-                Example Button
-                {/* <button onClick={goToNextLevel}>
-                    Next Level
-                </button> */}
+            <Node
+                key={"node1"}
+                type="object"
+                settings={{
+                    startPos: {
+                        x: 900,
+                        y: 500
+                    },
+                    size: {
+                        width: 50,
+                        height: 50
+                    }
+                }}
+                collisionInfo={registerCollisionObject}
+            >
+                Obsticle 1
             </Node>
         </Scene>
     );
